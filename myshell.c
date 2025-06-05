@@ -23,6 +23,7 @@ int main(void) {
     int rm = 0;
     int totalFiles = 0;
     int input = 0;
+    int pos = 0;
 
 
     while (1) {
@@ -53,10 +54,11 @@ int main(void) {
             if ((de->d_type) & DT_REG){
 
                 fseek(de->d_name, 0, SEEK_END);
+                pos = ftell(de->d_name);
 
                 // Using strcpy to copy files names to array
                 strcpy(files[c], de->d_name);
-                printf(" ( %d File: %s ) \n", c++, de->d_name);
+                printf(" ( %d Size:%d File: %s ) \n", c++, pos, de->d_name);
 
             }
             if ((c % 5) == 0) {
