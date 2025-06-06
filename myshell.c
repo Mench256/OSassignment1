@@ -67,6 +67,7 @@ int main(void) {
                 FILE *newFile = fopen(de->d_name, "r");
                 fseek(newFile, 0, SEEK_END);
                 pos = ftell(newFile);
+                fclose(newFile);
                 sizes[c] = pos;
 
                 // Using strcpy to copy files names to array
@@ -139,8 +140,36 @@ int main(void) {
 
                 if(input == 1){
 
+                    for(int i = 0; i < totalFiles; i++){
+                        for(int j = i + 1; j < totalFiles; j++){
+                            if(sizes[i] < sizes[j]){
+                                chat temp[MAX_FILE_NAME];
+                                strcpy(temp, files[i]);
+                                int temp = sizes[j];
+                                sizes[i] = sizes[j];
+                                strcpy(files[i], files[j]);
+                                sizes[j] = temp;
+                                strcpy(files[j], temp);    
+                            }
+                        }
+                    }
+
                 }
                 else{
+
+                    for(int i = 0; i < totalFiles; i++){
+                        for(int j = i + 1; j < totalFiles; j++){
+                            if(dates[i] < dates[j]){
+                                char temp[MAX_FILE_NAME];
+                                strcpy(temp, files[i]);
+                                time_t temp = dates[j];
+                                dates[i] = dates[j];
+                                strcpy(files[i], files[j]);
+                                dates[j] = temp;  
+                                strcpy(files[j], tempStr);
+                            }
+                        }
+                    }
 
 
                 }
