@@ -47,6 +47,7 @@ int main(void) {
 
             totalFiles++;
         }
+        int numFiles = c;
         closedir(d);
 
         printf("-----------------------------------------\n");
@@ -61,6 +62,7 @@ int main(void) {
 
                     time_t modTime = fileStat.st_mtime;
                     dates[c] = modTime;
+                    c++;
 
                 }
 
@@ -77,9 +79,8 @@ int main(void) {
             }
             if ((c % 5) == 0) {
                 printf("Hit N for Next\n");
-                k = getchar();
+               k = getchar();
             }
-            c++;
         }
         closedir(d);
 
@@ -114,13 +115,13 @@ int main(void) {
 
             // Implementing remove function
             case 'w':
-                for(int i = 0; i < totalFiles; i++){
+                for(int i = 0; i < numFiles; i++){
                     printf("File[%d]: %s\n", i, files[i]);
                 }
                 printf("Please enter which file you would like to delete: ");
                 scanf("%d", &rm);
 
-                if(rm >= 0 && rm < totalFiles){
+                if(rm >= 0 && rm < numFiles){
 
                     if(remove(files[rm]) == 0){
                         printf("File deleted successfully!\n");
@@ -140,35 +141,42 @@ int main(void) {
 
                 if(input == 1){
 
-                    for(int i = 0; i < totalFiles; i++){
-                        for(int j = i + 1; j < totalFiles; j++){
+                    for(int i = 0; i < numFiles; i++){
+                        for(int j = i + 1; j < numFiles; j++){
                             if(sizes[i] < sizes[j]){
-                                chat temp[MAX_FILE_NAME];
+                                char temp[MAX_FILE_NAME];
                                 strcpy(temp, files[i]);
-                                int temp = sizes[j];
+                                int temp2 = sizes[j];
                                 sizes[i] = sizes[j];
                                 strcpy(files[i], files[j]);
-                                sizes[j] = temp;
+                                sizes[j] = temp2;
                                 strcpy(files[j], temp);    
                             }
                         }
                     }
 
+                    for(int i = 0; i < numFiles; i++){
+                        printf("File[%d]: %s Size: %d Time: %s\n", i, files[i], sizes[i], ctime(&dates[i]));
+                    }
+
                 }
                 else{
 
-                    for(int i = 0; i < totalFiles; i++){
-                        for(int j = i + 1; j < totalFiles; j++){
+                    for(int i = 0; i < numFiles; i++){
+                        for(int j = i + 1; j < numFiles; j++){
                             if(dates[i] < dates[j]){
                                 char temp[MAX_FILE_NAME];
                                 strcpy(temp, files[i]);
-                                time_t temp = dates[j];
+                                time_t temp2 = dates[j];
                                 dates[i] = dates[j];
                                 strcpy(files[i], files[j]);
-                                dates[j] = temp;  
-                                strcpy(files[j], tempStr);
+                                dates[j] = temp2;  
+                                strcpy(files[j], temp);
                             }
                         }
+                    }
+                    for(int i = 0; i < numFiles; i++){
+                        printf("File[%d]: %s Size: %d Time: %s\n", i, files[i], sizes[i], ctime(&dates[i]));
                     }
 
 
