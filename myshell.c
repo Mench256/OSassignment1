@@ -81,6 +81,14 @@ int main(void) {
                 printf("Hit N for Next\n");
                k = getchar();
             }
+
+            printf("Please enter one of the following: \n");
+            printf("(q) to quit\n");
+            printf("(e) to edit a file\n");
+            printf("(r) to run a file\n");
+            printf("(c) to change directories\n");
+            printf("(w) to remove a file\n");
+            printf("(s) to sort files by date or time\n");
         }
         closedir(d);
 
