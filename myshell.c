@@ -1,4 +1,11 @@
-// Abraham Menchaca, 100216
+// Abraham Menchaca, 1002167812
+// sites used: 
+// https://www.geeksforgeeks.org/c-program-find-size-file/
+// https://www.geeksforgeeks.org/techtips/ftell-c-example/
+// https://www.geeksforgeeks.org/strcpy-in-c/
+// https://www.youtube.com/watch?v=CYpp9OduyJM
+// stackoverflow.com
+
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -15,6 +22,7 @@ int main(void) {
     char files[500][MAX_FILE_NAME];
     int sizes[500];
     time_t dates[500];
+    char directories[500][MAX_FILE_NAME];
     struct stat fileStat;   
 
     pid_t child;
@@ -26,6 +34,7 @@ int main(void) {
 
     int rm = 0;
     int totalFiles = 0;
+    int totalDirectories = 0;
     int input = 0;
     int pos = 0;
 
@@ -41,9 +50,15 @@ int main(void) {
         d = opendir(".");
         c = 0;
         while ((de = readdir(d))) {
-            if ((de->d_type) & DT_DIR)
+            if ((de->d_type) & DT_DIR){
                 printf(" ( %d Directory: %s ) \n", c++, de->d_name);
-            
+                // Copying directories to directories array
+                strcpy(directories[c], de->d_name);
+
+                totalDirectories++;
+
+            }
+
 
             totalFiles++;
         }
@@ -89,6 +104,7 @@ int main(void) {
             printf("(c) to change directories\n");
             printf("(w) to remove a file\n");
             printf("(s) to sort files by date or time\n");
+            printf("(m) to move to another directory\n");
         }
         closedir(d);
 
@@ -166,7 +182,6 @@ int main(void) {
                     for(int i = 0; i < numFiles; i++){
                         printf("File[%d]: %s Size: %d Time: %s\n", i, files[i], sizes[i], ctime(&dates[i]));
                     }
-
                 }
                 else{
 
@@ -189,6 +204,35 @@ int main(void) {
 
 
                 }
+                break;
+
+                case 'm':
+                    printf("Please enter the directory that you would like to move to: \n");
+
+                    // Listing off directories for user
+                    for(int i = 0; i < totalDirectories; i++){
+                        printf("Directory[%d]: %s\n", i, directories[i]);
+                    }
+
+                    int choice = -1;
+                    scanf("%d", &choice);
+
+                   if(choice >= 0 && choice < totalDirectories){
+
+                    chdir(directories[choice]);
+
+                   }
+                   else{
+
+                        printf("Directory not found!\n");
+
+                   }
+                   break;
+
+
+
+
+                
 
                 
 
