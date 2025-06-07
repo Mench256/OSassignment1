@@ -1,8 +1,8 @@
 // Abraham Menchaca, 1002167812
 // sites used: 
-// https://www.geeksforgeeks.org/c-program-find-size-file/
-// https://www.geeksforgeeks.org/techtips/ftell-c-example/
-// https://www.geeksforgeeks.org/strcpy-in-c/
+// https://www.geeksforgeeks.org/numFiles-program-find-size-file/
+// https://www.geeksforgeeks.org/techtips/ftell-numFiles-example/
+// https://www.geeksforgeeks.org/strcpy-in-numFiles/
 // https://www.youtube.com/watch?v=CYpp9OduyJM
 // stackoverflow.com
 
@@ -28,15 +28,16 @@ int main(void) {
     pid_t child;
     DIR *d;
     struct dirent *de;
-    int i, c, k;
+    char n;
     char s[256], cmd[256];
     time_t t;
 
     int rm = 0;
-    int totalFiles = 0;
     int totalDirectories = 0;
     int input = 0;
     int pos = 0;
+    int numFiles = 0;
+    int filesPrinted = 0;
 
 
     while (1) {
@@ -48,27 +49,21 @@ int main(void) {
         printf("\nCurrent Directory: %s\n", s);
 
         d = opendir(".");
-        c = 0;
         while ((de = readdir(d))) {
             if ((de->d_type) & DT_DIR){
-                printf(" ( %d Directory: %s ) \n", c++, de->d_name);
                 // Copying directories to directories array
-                strcpy(directories[c], de->d_name);
+                strcpy(directories[totalDirectories], de->d_name);
+                printf("(%d Directory: %s )\n", totalDirectories, directories[totalDirectories]);
 
                 totalDirectories++;
 
             }
-
-
-            totalFiles++;
         }
-        int numFiles = c;
         closedir(d);
 
         printf("-----------------------------------------\n");
 
         d = opendir(".");
-        c = 0;
         // This is what is printing out the files
         while ((de = readdir(d))) {
             if ((de->d_type) & DT_REG){
@@ -76,8 +71,8 @@ int main(void) {
                 if (stat(de->d_name, &fileStat) == 0){
 
                     time_t modTime = fileStat.st_mtime;
-                    dates[c] = modTime;
-                    c++;
+                    dates[numFiles] = modTime;
+                    
 
                 }
 
@@ -85,35 +80,55 @@ int main(void) {
                 fseek(newFile, 0, SEEK_END);
                 pos = ftell(newFile);
                 fclose(newFile);
-                sizes[c] = pos;
+                sizes[numFiles] = pos;
 
                 // Using strcpy to copy files names to array
-                strcpy(files[c], de->d_name);
-                printf(" ( %d Size:%d File: %s Time: %s) \n", c, pos, de->d_name, ctime(&dates[c]));
+                strcpy(files[numFiles], de->d_name);
+                printf(" ( %d Size:%d File: %s Time: %s) \n", numFiles, pos, de->d_name, ctime(&dates[numFiles]));
+
+                filesPrinted++;
+                numFiles++;
 
             }
-            if ((c % 5) == 0) {
-                printf("Hit N for Next\n");
-               k = getchar();
-            }
+            /*
+            if ((filesPrinted % 5) == 0) {
+                printf("Please enter N to continue: \n");
 
-            printf("Please enter one of the following: \n");
-            printf("(q) to quit\n");
-            printf("(e) to edit a file\n");
-            printf("(r) to run a file\n");
-            printf("(c) to change directories\n");
-            printf("(w) to remove a file\n");
-            printf("(s) to sort files by date or time\n");
-            printf("(m) to move to another directory\n");
+                char n;
+                scanf("%c", &n);
+                while ((getchar()) != '\n' && !feof(stdin));
+
+                if(n != 'n' && n != 'N'){
+
+                    printf("Invalid Input!\n");
+
+                }
+
+
+            }
+                */
+
+            numFiles++;
+
         }
+
+        printf("Please enter one of the following: \n");
+        printf("(q) to quit\n");
+        printf("(e) to edit a file\n");
+        printf("(r) to run a file\n");
+        printf("(c) to change directories\n");
+        printf("(w) to remove a file\n");
+        printf("(s) to sort files by date or time\n");
+        printf("(m) to move to another directory\n");
+
         closedir(d);
 
         printf("-----------------------------------------\n");
 
-        c = getchar();
-        getchar();
+        char x;
+        scanf("\n%c", &x);
 
-        switch (c) {
+        switch (x) {
             case 'q':
                 exit(0); /* quit */
 
@@ -149,6 +164,7 @@ int main(void) {
 
                     if(remove(files[rm]) == 0){
                         printf("File deleted successfully!\n");
+                        numFiles--;
 
                     }
                     else{
