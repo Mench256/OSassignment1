@@ -19,7 +19,7 @@
 #define MAX_FILE_NAME 50
 
 int main(void) {
-    // Declaring struct of files
+
     char files[500][MAX_FILE_NAME];
     int sizes[500];
     time_t dates[500];
@@ -78,9 +78,24 @@ int main(void) {
                     time_t modTime = fileStat.st_mtime;
                     dates[numFiles] = modTime;
                     
+                    // Pausing after every 5 files are printed
+                    if ((filesPrinted % 5) == 0) {
+                        printf("Please enter N to continue: \n");
+        
+                        char n;
+                        scanf("%c", &n);
+                        while ((getchar()) != '\n' && !feof(stdin));
+
+                        // Checking if User inputs N for next
+                        if(n != 'n' && n != 'N'){
+        
+                            printf("Invalid Input!\n");
+        
+                        }
 
                 }
 
+                // Getting sizes of files and adding to sizes array
                 FILE *newFile = fopen(de->d_name, "r");
                 fseek(newFile, 0, SEEK_END);
                 pos = ftell(newFile);
@@ -95,25 +110,11 @@ int main(void) {
                 numFiles++;
 
             }
-            if ((filesPrinted % 5) == 0) {
-                printf("Please enter N to continue: \n");
-
-                char n;
-                scanf("%c", &n);
-                while ((getchar()) != '\n' && !feof(stdin));
-
-                if(n != 'n' && n != 'N'){
-
-                    printf("Invalid Input!\n");
-
-                }
-
-
             }
                 
 
         }
-
+        // Small Menu for the user to choose operations
         printf("Please enter one of the following: \n");
         printf("(q) to quit\n");
         printf("(e) to edit a file\n");
@@ -127,6 +128,8 @@ int main(void) {
 
         printf("-----------------------------------------\n");
 
+
+        // Getting user input
         char x;
         scanf("\n%c", &x);
 
@@ -134,6 +137,7 @@ int main(void) {
             case 'q':
                 exit(0); /* quit */
 
+            // Case to Edit files
             case 'e':
                 printf("Edit what?:");
                 scanf("%s", s);
@@ -141,20 +145,20 @@ int main(void) {
                 strcat(cmd, s);
                 system(cmd);
                 break;
-
+            // Case to run files
             case 'r':
                 printf("Run what?:");
                 scanf("%s", cmd);
                 system(cmd);
                 break;
-
+            // Case to change directories
             case 'c':
                 printf("Change To?:");
                 scanf("%s", cmd);
                 chdir(cmd);
                 break;
 
-            // Implementing remove function
+                // Implementing remove function
             case 'w':
                 for(int i = 0; i < numFiles; i++){
                     printf("File[%d]: %s\n", i, files[i]);
@@ -162,6 +166,7 @@ int main(void) {
                 printf("Please enter which file you would like to delete: ");
                 scanf("%d", &rm);
 
+                // Checking if user input is valid
                 if(rm >= 0 && rm < numFiles && isdigit(rm) > 0){
 
                     if(remove(files[rm]) == 0){
@@ -182,7 +187,7 @@ int main(void) {
                 scanf("%d", &input);
 
                 if(input == 1){
-
+                    // Sorting files by size
                     for(int i = 0; i < numFiles; i++){
                         for(int j = i + 1; j < numFiles; j++){
                             if(sizes[i] < sizes[j]){
@@ -196,13 +201,13 @@ int main(void) {
                             }
                         }
                     }
-
+                    // Printing out files
                     for(int i = 0; i < numFiles; i++){
                         printf("File[%d]: %s Size: %d Time: %s\n", i, files[i], sizes[i], ctime(&dates[i]));
                     }
                 }
                 else{
-
+                    // Sorting Files by Dates
                     for(int i = 0; i < numFiles; i++){
                         for(int j = i + 1; j < numFiles; j++){
                             if(dates[i] < dates[j]){
@@ -216,6 +221,7 @@ int main(void) {
                             }
                         }
                     }
+                    // Printing out files
                     for(int i = 0; i < numFiles; i++){
                         printf("File[%d]: %s Size: %d Time: %s\n", i, files[i], sizes[i], ctime(&dates[i]));
                     }
