@@ -45,6 +45,10 @@ int main(void) {
         t = time(NULL);
         printf("Time: %s\n", ctime(&t));
         printf("-----------------------------------------------\n");
+        // Reseting counters
+        numFiles = 0;
+        filesPrinted = 0;
+        totalDirectories = 0;
 
         getcwd(s, 200);
         printf("\nCurrent Directory: %s\n", s);
