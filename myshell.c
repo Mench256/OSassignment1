@@ -15,6 +15,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 #define MAX_FILE_NAME 50
 
 int main(void) {
@@ -90,7 +91,6 @@ int main(void) {
                 numFiles++;
 
             }
-            /*
             if ((filesPrinted % 5) == 0) {
                 printf("Please enter N to continue: \n");
 
@@ -106,9 +106,7 @@ int main(void) {
 
 
             }
-                */
-
-            numFiles++;
+                
 
         }
 
@@ -160,7 +158,7 @@ int main(void) {
                 printf("Please enter which file you would like to delete: ");
                 scanf("%d", &rm);
 
-                if(rm >= 0 && rm < numFiles){
+                if(rm >= 0 && rm < numFiles && isdigit(rm) > 0){
 
                     if(remove(files[rm]) == 0){
                         printf("File deleted successfully!\n");
