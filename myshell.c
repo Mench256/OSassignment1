@@ -1,8 +1,10 @@
-// Abraham Menchaca, 1002167812
+// Abraham Menchaca, 1002167812, CSE-3320-002
 // sites used: 
+// https://www.geeksforgeeks.org/videos/c-program-to-find-size-of-file/
 // https://www.geeksforgeeks.org/numFiles-program-find-size-file/
 // https://www.geeksforgeeks.org/techtips/ftell-numFiles-example/
 // https://www.geeksforgeeks.org/strcpy-in-numFiles/
+// https://www.geeksforgeeks.org/fgets-function-in-c/
 // https://www.youtube.com/watch?v=CYpp9OduyJM
 // stackoverflow.com
 
@@ -85,6 +87,7 @@ int main(void) {
                         char n;
                         scanf("%c", &n);
                         while ((getchar()) != '\n' && !feof(stdin));
+                        
 
                         // Checking if User inputs N for next
                         if(n != 'n' && n != 'N'){
@@ -97,14 +100,21 @@ int main(void) {
 
                 // Getting sizes of files and adding to sizes array
                 FILE *newFile = fopen(de->d_name, "r");
-                fseek(newFile, 0, SEEK_END);
-                pos = ftell(newFile);
-                fclose(newFile);
-                sizes[numFiles] = pos;
+
+                if(newFile != NULL){
+                    fseek(newFile, 0, SEEK_END);
+                    pos = ftell(newFile);
+                    fclose(newFile);
+                    sizes[numFiles] = pos;
+                }
+                else{
+                    // Setting to -1 if returns NULL
+                    sizes[numFiles] = -1;
+                }
 
                 // Using strcpy to copy files names to array
                 strcpy(files[numFiles], de->d_name);
-                printf(" ( %d Size:%d File: %s Time: %s) \n", numFiles, pos, de->d_name, ctime(&dates[numFiles]));
+                printf(" %d Size:%d File: %s Time: %s \n", numFiles, pos, de->d_name, ctime(&dates[numFiles]));
 
                 filesPrinted++;
                 numFiles++;
