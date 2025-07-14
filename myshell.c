@@ -1,4 +1,4 @@
-// Abraham Menchaca, 1002167812, CSE-3320-002
+// Abraham Menchaca
 // sites used: 
 // https://www.geeksforgeeks.org/videos/c-program-to-find-size-of-file/
 // https://www.geeksforgeeks.org/numFiles-program-find-size-file/
